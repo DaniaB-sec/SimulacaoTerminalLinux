@@ -35,6 +35,7 @@ impl Arquivo {
     fn apresentar(&self) {
         println!("\n===== DADOS DO ARQUIVO =====");
         println!("Nome: {}", self.nome);
+        println!("Tamanho: {} bytes", self.tamanho);
         println!("Leitura: {}", self.permissoes.0);
         println!("Escrita: {}", self.permissoes.1);
         println!("Execução: {}", self.permissoes.2);
