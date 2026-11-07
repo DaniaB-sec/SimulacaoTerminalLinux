@@ -1,52 +1,117 @@
 use std::io;
 
-static ESCOLA: &str = "PUCPR";
-
-// STRUCT
+// STRUCTS COMECAM AQUI
+// STR arquivo
 struct Arquivo {
     nome: String,
     tamanho: u64,
-    permissoes: (bool, bool, bool),
+    permissoes: (Permissao, Permissao, Permissao),
     uid_dono: u16,
     gid_grupo: u16,
 }
+// STR permissoes
+struct Permissao {
+    leitura: bool,
+    escrita: bool,
+    execucao: bool,
+}
+// STR Diretorio
+struct Diretorio {
+    nome: String,
+    arquivos: Vec<Arquivo>,
+    permissoes: (Permissao, Permissao, Permissao),
+    uid_dono: u16,
+}
+// STR usuario
+struct Usuario {
+    nome: String,
+    uid: u16,
+    grupos_ids: Vec<u16>,
+}
+// STR Grupo
+struct Grupo {
+    nome: String,
+    gid: u16,
+    membros_uids: Vec<u16>,
+}
 
-// IMPLEMENTAÇÃO
 
+// IMPLS comecam aquiii
 impl Arquivo {
     // NEW
-    fn new(
-        nome: String,
-        tamanho: u64,
-        permissoes: (bool, bool, bool),
-        uid_dono: u16,
-        gid_grupo: u16,
-    ) -> Self {
+    fn new(nome: String, tamanho: u64, uid_dono: u16, gid_grupo: u16,) -> Self {
         Self {
             nome,
             tamanho,
-            permissoes,
+            permissoes: (Permissao {leitura: true, escrita: true, execucao: false,}, Permissao {leitura: true, escrita: true, execucao: false,}, Permissao {leitura: true, escrita: false, execucao: false, },),
             uid_dono,
             gid_grupo,
         }
     }
 
-    // MÉTODO PARA APRESENTAR OS DADOS
+    // APR DE DADOS
     fn apresentar(&self) {
         println!("\n===== DADOS DO ARQUIVO =====");
         println!("Nome: {}", self.nome);
         println!("Tamanho: {} bytes", self.tamanho);
-        println!("Leitura: {}", self.permissoes.0);
-        println!("Escrita: {}", self.permissoes.1);
-        println!("Execução: {}", self.permissoes.2);
-        println!("gid dono: {}", self.gid_grupo);
-        println!("uid grupo: {}", self.uid_dono);
-        println!(": {}", ESCOLA);
+        println!("Permissões do dono:");
+        println!("Leitura: {}", self.permissoes.0.leitura);
+        println!("Escrita: {}", self.permissoes.0.escrita);
+        println!("Execução: {}", self.permissoes.0.execucao);
+        println!("Permissões do grupo:");
+        println!("Leitura: {}", self.permissoes.1.leitura);
+        println!("Escrita: {}", self.permissoes.1.escrita);
+        println!("Execução: {}", self.permissoes.1.execucao);
+        println!("Permissões de outros:");
+        println!("Leitura: {}", self.permissoes.2.leitura);
+        println!("Escrita: {}", self.permissoes.2.escrita);
+        println!("Execução: {}", self.permissoes.2.execucao);
+        println!("uid dono: {}", self.uid_dono);
+        println!("gid grupo: {}", self.gid_grupo);
     }
 }
+impl Permissao{
+    fn new(leitura: bool, escrita:bool, execucao:bool) -> Self {
+        Self {
+            leitura,
+            escrita,
+            execucao,
 
+        }
+    }
+
+}
+impl Diretorio {
+    fn new(nome: String, permissoes:(Permissao, Permissao, Permissao), uid_dono: u16) -> Self {
+        Self {
+            nome,
+            arquivos: Vec::new(),
+            permissoes,
+            uid_dono,
+        }
+    }
+
+}
+impl Usuario {
+    fn new(nome: String, uid: u16) -> Self {
+        Self {
+            nome,
+            uid,
+            grupos_ids: Vec::new(),
+        }
+    }
+
+}
+impl Grupo {
+    fn new(nome: String, gid: u16) -> Self {
+        Self{
+            nome,
+            gid,
+            membros_uids: Vec::new(),
+        }
+    }
+}
 fn main() {
-    // INPUT DO NOME
     let mut nome = String::new();
 
     println!("Digite seu nome:");
@@ -63,15 +128,12 @@ fn main() {
 
     let tamanho: u64 = tamanho.trim().parse().expect("Valor inválido");
 
-    let permissoes = (true, true, false);
-
     let uid_dono: u16 = 1000;
 
     let gid_grupo: u16 = 1000;
 
     // CRIANDO A STRUCT COM NEW
-    let arquivo1 = Arquivo::new(nome, tamanho, permissoes, uid_dono, gid_grupo);
+    let arquivo1 = Arquivo::new(nome, tamanho, uid_dono, gid_grupo);
 
-    // CHAMANDO O MÉTODO
     arquivo1.apresentar();
 }
