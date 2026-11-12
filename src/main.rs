@@ -663,7 +663,7 @@ fn menu() {
                 let nome = ler_input("Nome do arquivo pra remover:");
 
                 let mut removido = false;  
-                for i in 0..arquivos.len() {
+                for i in 0..arquivos.len() { 17/ 
 
                     if arquivos[i].nome == nome {
 
